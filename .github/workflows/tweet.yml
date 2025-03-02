@@ -1,0 +1,28 @@
+name: Daily Tweet Bot
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 매일 오전 9시 실행 (UTC 기준)
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 복제
+        uses: actions/checkout@v3
+      
+      - name: Python 환경 설정
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+
+      - name: 라이브러리 설치
+        run: pip install tweepy python-dotenv
+
+      - name: 트윗 실행
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+        run: python tweet_bot.py
